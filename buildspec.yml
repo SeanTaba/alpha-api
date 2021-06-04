@@ -14,15 +14,16 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - ls -a
-      - unzip target/alpha-api-0.1.war
-      - ls -a
-#      - mv target/WEB-INF WEB-INF
+#      - ls -a
+#      - unzip target/alpha-api-0.1.war
+#      - ls -a
+      - mv target/alpha-api-0.1.jar alpha-api-0.1.jar
 #      - ls -a
 #      - mv target/META-INF META-INF
 #      - ls -a
 artifacts:
   files:
-    - WEB-INF/**/*
-    - META-INF/**/*
+    - alpha-api-0.1.jar
+#    - WEB-INF/**/*
+#    - META-INF/**/*
   name: artifact
