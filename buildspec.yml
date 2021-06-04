@@ -15,6 +15,8 @@ phases:
     commands:
       - echo Build completed on `date`
       - unzip target/alpha-api-0.1.war
+      - mv target/WEB-INF WEB_INF
+      - mv target/META_INF META_INF
 artifacts:
   files:
     - WEB-INF/**/*
