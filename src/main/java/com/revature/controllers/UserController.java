@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,10 +24,16 @@ public class UserController
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/test")
-    public String test()
+    @RequestMapping("/getUserById")
+    public User getUserById(@RequestParam int uid)
     {
-        return "/users/test we are here!";
+        return userRepository.findUserById(uid);
+    }
+
+    @RequestMapping("/getUserByUn")
+    public User getUserByUsername(@RequestParam String uun)
+    {
+        return userRepository.findUserByUsername(uun);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
