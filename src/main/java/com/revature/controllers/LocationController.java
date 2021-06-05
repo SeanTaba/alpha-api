@@ -1,18 +1,19 @@
 package com.revature.controllers;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.models.Location;
 import com.revature.repos.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/locations")
@@ -24,6 +25,21 @@ public class LocationController
     public LocationController(LocationRepository locationRepository)
     {
         this.locationRepository = locationRepository;
+    }
+
+    @RequestMapping("/coordinates")
+    public String getCoordinates(@RequestParam String country, @RequestParam String state, @RequestParam String city)
+    {
+        Map<Double,Double> coordinates = locationRepository.findCoordinates(country, state, city);
+        ObjectMapper mapper = new ObjectMapper();
+        try
+        {
+            return mapper.writeValueAsString(coordinates);
+        } catch (JsonProcessingException e)
+        {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     @RequestMapping()
