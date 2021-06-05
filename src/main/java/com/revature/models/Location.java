@@ -17,7 +17,7 @@ public class Location
     @Column(nullable = false)
     private String city;
 
-    @Column(nullable = false)
+    @Column(name = "state",nullable = false)
     private String state;
 
     @Column(name = "state_id",nullable = false)

@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/locations")
 public class LocationController
 {
-    private LocationRepository locationRepository;
+    private final LocationRepository locationRepository;
 
     @Autowired
     public LocationController(LocationRepository locationRepository)
@@ -32,5 +32,12 @@ public class LocationController
     public List<Location> getLocationByCity(@RequestParam("lc") String lc)
     {
         return locationRepository.getLocationByCity(lc);
+    }
+
+    @RequestMapping("/getLocationByCityState")
+    public Location getLocationByCityState(@RequestParam("cn") String city, @RequestParam("sn") String state)
+    {
+//        System.out.printf("City: %s - State: %s\n", city,state);
+        return locationRepository.getLocationByCityState(city,state);
     }
 }
