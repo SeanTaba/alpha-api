@@ -1,5 +1,7 @@
 package com.revature.models;
 
+import com.revature.dtos.CoordinatesPair;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -15,6 +17,10 @@ public class Location
     @NotNull
     @Column(nullable = false)
     private String city;
+
+    @NotNull
+    @Column(nullable = false)
+    private String country;
 
     @Column(nullable = false)
     private String state;
@@ -112,5 +118,25 @@ public class Location
     public void setTimezone(String timezone)
     {
         this.timezone = timezone;
+    }
+
+    public String getCountry()
+    {
+        return country;
+    }
+
+    public void setCountry(String country)
+    {
+        this.country = country;
+    }
+
+    public CoordinatesPair<Double,Double> getCoordinates()
+    {
+        return new CoordinatesPair<>(latitude, longitude);
+    }
+
+    public String getCoordinatesString()
+    {
+        return new CoordinatesPair<>(latitude,longitude).toString();
     }
 }

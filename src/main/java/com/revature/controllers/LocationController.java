@@ -6,11 +6,12 @@ import com.revature.repos.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @RestController
@@ -24,39 +25,86 @@ public class LocationController
     {
         this.locationRepository = locationRepository;
     }
-    @RequestMapping("/getLocationById")
-    public Location getLocationById(@RequestParam("lid") int lid)
+
+    @RequestMapping()
+    public Set<String> listCountries()
     {
-        return locationRepository.findById(lid);
+        try
+        {
+            return locationToString(locationRepository.findAll(), Location.class.getMethod("getCountry"));
+        } catch (NoSuchMethodException e)
+        {
+            e.printStackTrace();
+            return new HashSet<>();
+        }
     }
 
-    @RequestMapping("/getLocationByCity")
-    public List<Location> getLocationByCity(@RequestParam("lc") String lc)
+    @RequestMapping("/{country}")
+    public Set<String> getCountries(@PathVariable String country)
     {
-        return locationRepository.findByCity(lc);
+        try
+        {
+            return locationToString(locationRepository.findByCountry(country), Location.class.getMethod("getState"));
+        } catch (NoSuchMethodException e)
+        {
+            e.printStackTrace();
+            return new HashSet<>();
+        }
     }
 
-    @RequestMapping("/states")
-    public Set<String> getStates()
+    @RequestMapping(path = "/{country}/{state}")
+    public Set<String> getCounties(@PathVariable String country, @PathVariable String state)
     {
-        return locationRepository.findAllStates();
+        try
+        {
+            return locationToString(locationRepository.findByCountryAndState(country,state), Location.class.getMethod("getCounty"));
+        } catch (NoSuchMethodException e)
+        {
+            e.printStackTrace();
+            return new HashSet<>();
+        }
     }
 
-    @RequestMapping(path = "/states/{state}")
-    public Set<String> getCounties(@PathVariable String state)
+    @RequestMapping(path = "/{country}/{state}/{county}")
+    public Set<String> getCities(@PathVariable String country, @PathVariable String state, @PathVariable String county)
     {
-        return locationRepository.findAllCountiesByState(state);
+        try
+        {
+            return locationToString(locationRepository.findByCountryAndStateAndCounty(country,state,county), Location.class.getMethod("getCity"));
+        } catch (NoSuchMethodException e)
+        {
+            e.printStackTrace();
+            return new HashSet<>();
+        }
     }
 
-    @RequestMapping(path = "/states/{state}/{county}")
-    public Set<String> getCities(@PathVariable String state, @PathVariable String county)
+    @RequestMapping(path = "/{country}/{state}/{county}/{city}")
+    public Set<String> getCoordinates(@PathVariable String country, @PathVariable String state, @PathVariable String county, @PathVariable String city)
     {
-        return locationRepository.findAllCitiesByStateAndCounty(state, county);
+        try
+        {
+            return locationToString(locationRepository.findByCountryAndStateAndCountyAndCity(country,state,county,city), Location.class.getMethod(
+                                                                                                                    "getCoordinatesString"));
+        } catch (NoSuchMethodException e)
+        {
+            e.printStackTrace();
+            return new HashSet<>();
+        }
     }
 
-    @RequestMapping(path = "/states/{state}/{county}/{city}")
-    public Map<Double,Double> getCoordinates(@PathVariable String state, @PathVariable String county, @PathVariable String city)
+    private Set<String> locationToString(Collection<Location> locations, Method method)
     {
-        return locationRepository.findCoordinates(state, county, city);
+        Set<String> strings = new HashSet<>();
+        locations.forEach(location ->
+                          {
+                              try
+                              {
+                                  strings.add((String) method.invoke(location));
+                              } catch (IllegalAccessException | InvocationTargetException e)
+                              {
+                                  e.printStackTrace();
+                              }
+                          });
+        return strings;
     }
 }
