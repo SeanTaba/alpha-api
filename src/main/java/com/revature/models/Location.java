@@ -1,6 +1,5 @@
 package com.revature.models;
 
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -17,7 +16,7 @@ public class Location
     @Column(nullable = false)
     private String city;
 
-    @Column(name = "state",nullable = false)
+    @Column(nullable = false)
     private String state;
 
     @Column(name = "state_id",nullable = false)
