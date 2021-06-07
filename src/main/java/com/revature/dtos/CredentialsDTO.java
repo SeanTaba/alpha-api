@@ -10,6 +10,10 @@ public class CredentialsDTO
     @NotEmpty
     private String password;
 
+    public CredentialsDTO(){
+        super();
+    }
+
     public String getUsername()
     {
         return username;
