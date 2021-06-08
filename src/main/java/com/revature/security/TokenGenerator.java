@@ -4,7 +4,6 @@ import com.revature.models.User;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -18,6 +17,7 @@ public class TokenGenerator {
     public TokenGenerator(JwtConfig jwtConfig){
         this.jwtConfig = jwtConfig;
     }
+
 
     public String createJwt(User user){
         long now = System.currentTimeMillis();

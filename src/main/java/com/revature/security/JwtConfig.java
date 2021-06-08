@@ -12,14 +12,12 @@ import java.security.Key;
 @Component
 public class JwtConfig {
 
-    @Value("${jwt.header}")
-    private String header;
 
-    @Value("${jwt.prefix}")
-    private String prefix;
+    private static String header;
 
-    @Value("${jwt.secret}")
-    private String secret;
+    private static String prefix;
+
+    private static String secret;
 
     @Value("#{24*60*60*1000}")
     private int expiration;
@@ -27,6 +25,13 @@ public class JwtConfig {
     private static final SignatureAlgorithm sigAlg = SignatureAlgorithm.HS512;
 
     private Key signingKey;
+
+    static {
+        header = System.getenv("Header");
+        prefix = System.getenv("Prefix");
+        secret = System.getenv("Secret");
+    }
+
 
     public String getHeader() {
         return header;
