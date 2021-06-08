@@ -5,13 +5,11 @@ import com.revature.models.User;
 import com.revature.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/users")
 public class UserController
@@ -24,16 +22,16 @@ public class UserController
         this.userRepository = userRepository;
     }
 
-    @RequestMapping("/getUserById")
-    public User getUserById(@RequestParam int uid)
+    @RequestMapping("/getUserByEmail")
+    public User getUserById(@RequestParam String uem)
     {
-        return userRepository.findUserById(uid);
+        return userRepository.findUserByEmail(uem);
     }
 
-    @RequestMapping("/getUserByUn")
-    public User getUserByUsername(@RequestParam String uun)
+    @RequestMapping("/getUserByUsername")
+    public User getUserByUsername(@RequestParam String un)
     {
-        return userRepository.findUserByUsername(uun);
+        return userRepository.findUserByUsername(un);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

@@ -6,15 +6,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.models.Location;
 import com.revature.repos.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/locations")
 public class LocationController
@@ -30,11 +30,10 @@ public class LocationController
     @RequestMapping("/coordinates")
     public String getCoordinates(@RequestParam String country, @RequestParam String state, @RequestParam String city)
     {
-        Map<Double,Double> coordinates = locationRepository.findCoordinates(country, state, city);
         ObjectMapper mapper = new ObjectMapper();
         try
         {
-            return mapper.writeValueAsString(coordinates);
+            return mapper.writeValueAsString(locationRepository.findCoordinates(country, state, city));
         } catch (JsonProcessingException e)
         {
             e.printStackTrace();
@@ -60,7 +59,7 @@ public class LocationController
     {
         try
         {
-            return locationToString(locationRepository.findByCountry(country), Location.class.getMethod("getState"));
+            return locationToString(locationRepository.findLocationByCountry(country), Location.class.getMethod("getState"));
         } catch (NoSuchMethodException e)
         {
             e.printStackTrace();
@@ -73,7 +72,7 @@ public class LocationController
     {
         try
         {
-            return locationToString(locationRepository.findByCountryAndState(country,state), Location.class.getMethod("getCounty"));
+            return locationToString(locationRepository.findLocationByCountryAndState(country,state), Location.class.getMethod("getCounty"));
         } catch (NoSuchMethodException e)
         {
             e.printStackTrace();
@@ -86,7 +85,7 @@ public class LocationController
     {
         try
         {
-            return locationToString(locationRepository.findByCountryAndStateAndCounty(country,state,county), Location.class.getMethod("getCity"));
+            return locationToString(locationRepository.findLocationByCountryAndStateAndCounty(country,state,county), Location.class.getMethod("getCity"));
         } catch (NoSuchMethodException e)
         {
             e.printStackTrace();
@@ -99,13 +98,21 @@ public class LocationController
     {
         try
         {
-            return locationToString(locationRepository.findByCountryAndStateAndCountyAndCity(country,state,county,city), Location.class.getMethod(
+            return locationToString(locationRepository.findLocationByCountryAndStateAndCountyAndCity(country,state,county,city), Location.class.getMethod(
                                                                                                                     "getCoordinatesString"));
         } catch (NoSuchMethodException e)
         {
             e.printStackTrace();
             return new HashSet<>();
         }
+    }
+
+    @RequestMapping("/getLocationByCountryAndState")
+    public Set<Location> getLocationByCountryAndState(@RequestParam String cr, @RequestParam String st)
+    {
+        Set<Location> locations = locationRepository.findLocationByCountryAndState(cr, st);
+        System.out.println(locations);
+        return locations; /*locationRepository.findLocationByCountryAndState(country, state);*/
     }
 
     private Set<String> locationToString(Collection<Location> locations, Method method)
