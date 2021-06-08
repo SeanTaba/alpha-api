@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-@RequestMapping("/api/docs")
+@RequestMapping(value = {"/api/docs", "/about"})
 public class ApiDocController
 {
     @GetMapping
