@@ -2,6 +2,7 @@ package com.revature.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.sql.Date;
 
 
 @Entity
@@ -22,7 +23,7 @@ public class Event {
     private String event_url;
 
     @Column(nullable = false)
-    private String event_date;
+    private Date event_date;
 
     @Column(nullable = false)
     private String event_title;
@@ -31,7 +32,7 @@ public class Event {
 
     }
 
-    public Event(int event_id, int user_id, String event_url, String event_date, String event_title, String event_description) {
+    public Event(int event_id, int user_id, String event_url, Date event_date, String event_title, String event_description) {
         this.event_id = event_id;
         this.user_id = user_id;
         this.event_url = event_url;
@@ -67,11 +68,11 @@ public class Event {
         this.event_url = event_url;
     }
 
-    public String getEvent_date() {
+    public Date getEvent_date() {
         return event_date;
     }
 
-    public void setEvent_date(String event_date) {
+    public void setEvent_date(Date event_date) {
         this.event_date = event_date;
     }
 
