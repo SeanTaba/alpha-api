@@ -38,18 +38,6 @@ public class UserController
         this.locationRepository = locationRepository;
     }
 
-    @RequestMapping("/getUserByEmail")
-    public User getUserById(@RequestParam String uem)
-
-    private UserService userService;
-
-    @Autowired
-    public UserController(UserService userService)
-
-    {
-        this.userService = userService;
-    }
-
 //    @RequestMapping("/getUserByEmail")
 //    public User getUserById(@RequestParam String uem)
 //    {

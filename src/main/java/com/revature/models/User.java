@@ -56,6 +56,15 @@ public class User
         this.email = email;
     }
 
+    public User(String username, String password, String firstName, String lastName, String email, String state, String city) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.state = state;
+        this.city = city;
+    }
 
     public int getId()
     {
@@ -112,9 +121,9 @@ public class User
         return city;
     }
 
-    public void setCity(String city)
-    {
+    public void setCity(String city) {
         this.city = city;
+    }
 
     public String getFirstName() {
         return firstName;

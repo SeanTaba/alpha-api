@@ -29,13 +29,15 @@ public class UserService {
 
 
     //registers newUser. Checks to see if email and uname are available (no user roles implemented)
-    public User register(User newUser) throws InvalidRequestException, ResourcePersistenceException {
+    public User register(User newUser) throws InvalidRequestException,EmailUnavailibleException,UsernameUnavailibleException {
+
         isUserValid(newUser);
-        if(isUsernameAvailable(newUser.getUsername())){
-            throw new ResourcePersistenceException("Username already taken.");
+
+        if(userRepo.existsByUsername(newUser.getUsername())){
+            throw new UsernameUnavailibleException();
         }
-        if(isEmailAvailable(newUser.getEmail())){
-            throw new ResourcePersistenceException("Email already taken.");
+        if(userRepo.existsByEmail(newUser.getEmail())){
+            throw new EmailUnavailibleException();
         }
         return userRepo.save(newUser);
 
@@ -45,23 +47,6 @@ public class UserService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<User> getAllUsers() {
         return userRepo.findAll();
-    }
-
-    //login validation
-    @Transactional(readOnly = true)
-    public Object authenticate(String username, String password) throws AuthenticationException {
-        if (isValid(username, "username") && isValid(password, "password")){
-            throw new InvalidRequestException("Invalid username value provided");
-        }
-        try{
-            return userRepo.findUserByUsernameAndPassword(username,password).orElseThrow(AuthenticationException::new);
-
-        }catch( Exception e){
-            if(e instanceof ResourceNotFoundException){
-                e.printStackTrace();
-            }
-            throw new DataSourceException();
-        }
     }
     //inverted method that validates all fields of a user using a switch method
     //without passing in an entire user object
@@ -133,7 +118,7 @@ public class UserService {
         try{
             return userRepo.isUsernameAvailable(username);
         }catch(Exception e){
-            throw new DataSourceException();
+            throw new DataSourceException(e);
         }
     }
 
@@ -149,7 +134,7 @@ public class UserService {
            if (e instanceof ResourceNotFoundException) {
                throw e;
            }
-           throw new DataSourceException();
+           throw new DataSourceException(e);
        }
     }
 
