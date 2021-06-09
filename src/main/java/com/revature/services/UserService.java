@@ -1,6 +1,13 @@
 package com.revature.services;
 
+
 import com.revature.exceptions.*;
+
+import com.revature.exceptions.AuthenticationException;
+import com.revature.exceptions.DataSourceException;
+import com.revature.exceptions.ResourceNotFoundException;
+import com.revature.models.User;
+
 import com.revature.repos.UserRepository;
 import com.revature.models.User;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,6 +26,7 @@ public class UserService {
     public UserService(UserRepository userDao) {
         this.userRepo = userDao;
     }
+
 
     //registers newUser. Checks to see if email and uname are available (no user roles implemented)
     public User register(User newUser) throws InvalidRequestException, ResourcePersistenceException {
@@ -73,7 +81,6 @@ public class UserService {
             default:
                 return true;
         }
-
 
     }
 
@@ -147,4 +154,16 @@ public class UserService {
     }
 
 
+    @Transactional(readOnly = true)
+    public User authenticate(String username, String password) throws AuthenticationException {
+
+        try {
+            return userRepo.findUserByUsernameAndPassword(username, password)
+                    .orElseThrow(AuthenticationException::new);
+        } catch (Exception e) {
+            if (e instanceof ResourceNotFoundException) throw e;
+            throw new DataSourceException(e);
+        }
+
+    }
 }

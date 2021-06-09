@@ -3,6 +3,7 @@ package com.revature.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
@@ -28,6 +29,23 @@ public class User
     @Email
     @Column(nullable = false, unique = true)
     private String email;
+
+    public User(){
+        super();
+    }
+
+    public User(int id, String username, String password, String email) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
 
     public int getId()
     {

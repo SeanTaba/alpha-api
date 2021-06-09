@@ -1,6 +1,5 @@
 package com.revature.dtos;
 
-import com.revature.models.User;
 import io.jsonwebtoken.Claims;
 
 public class PrincipalDTO {

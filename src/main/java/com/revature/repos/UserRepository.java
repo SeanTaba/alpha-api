@@ -14,11 +14,17 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>
 {
-    Optional<Object> findUserByUsernameAndPassword(String username, String password);
 
     @Query("select case when count(u) > 0 then true else false end from User u where u.username = :username")
     Boolean isUsernameAvailable(String username);
 
     @Query("select case when count(u) > 0 then true else false end from User u where u.email = :email")
     Boolean isEmailAvailable(String email);
+
+    Optional<User> findUserByUsername(String username);
+    Optional<User> findUserByEmail(String email);
+    Optional<User> findUserByUsernameAndPassword(String username, String password);
+    Boolean existsByUsername(String username);
+    Boolean existsByEmail(String email);
+
 }

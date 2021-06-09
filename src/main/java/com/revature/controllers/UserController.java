@@ -5,6 +5,9 @@ import com.revature.repos.UserRepository;
 import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import com.revature.dtos.UserDTO;
 import org.springframework.http.HttpStatus;
@@ -50,6 +53,7 @@ public class UserController
 //
 //        return userRepository.registerUser(newUser);
 //    }
+
 
 
 
