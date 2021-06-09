@@ -1,54 +1,59 @@
 package com.revature.controllers;
 
-
 import com.revature.models.User;
 import com.revature.repos.UserRepository;
+import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import com.revature.dtos.UserDTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin(origins = "*")
+
 @RestController
-@RequestMapping("/users")
+@RequestMapping("users")
 public class UserController
 {
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    public UserController(UserRepository userRepository)
+    public UserController(UserService userService)
     {
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
-    @RequestMapping("/getUserByEmail")
-    public User getUserById(@RequestParam String uem)
-    {
-        // TODO need to fix to properly handle optionals
-        return userRepository.findUserByEmail(uem).get();
-    }
+//    @RequestMapping("/getUserByEmail")
+//    public User getUserById(@RequestParam String uem)
+//    {
+//        return userRepository.findUserByEmail(uem);
+//    }
+//
+//    @RequestMapping("/getUserByUsername")
+//    public User getUserByUsername(@RequestParam String un)
+//    {
+//        return userRepository.findUserByUsername(un);
+//    }
+//
+//    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+//    public List<User> getAllUsers()
+//    {
+//        return userRepository.findAll();
+//    }
+//
+//    @PostMapping(value="/users",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+//    public User register(@RequestBody @Valid User newUser)
+//    {
+//
+//        return userRepository.registerUser(newUser);
+//    }
 
-    @RequestMapping("/getUserByUsername")
-    public User getUserByUsername(@RequestParam String un)
-    {
-        // TODO need to fix to properly handle optionals
-        return userRepository.findUserByUsername(un).get();
-    }
-// Use @PreAuthorize with Role to select who has access to a specific command
-//    @PreAuthorize("hasRole('anyRole')")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<User> getAllUsers()
-    {
-//        Use to get current users details
-//        UserDetails userDetails =
-//                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return userRepository.findAll();
-    }
 
 
 
