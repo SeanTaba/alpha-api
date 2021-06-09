@@ -20,9 +20,9 @@ public class JwtConfig {
     private static String secret;
 
     @Value("#{24*60*60*1000}")
-    private int expiration;
+    private long expiration;
 
-    private static final SignatureAlgorithm sigAlg = SignatureAlgorithm.HS512;
+    private static final SignatureAlgorithm sigAlg = SignatureAlgorithm.HS256;
 
     private Key signingKey;
 
@@ -45,7 +45,7 @@ public class JwtConfig {
         return secret;
     }
 
-    public int getExpiration() {
+    public long getExpiration() {
         return expiration;
     }
 
