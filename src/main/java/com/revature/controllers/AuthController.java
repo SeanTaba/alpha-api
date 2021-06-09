@@ -4,6 +4,9 @@ import javax.validation.Valid;
 
 import com.revature.dtos.CredentialsDTO;
 import com.revature.dtos.UserDTO;
+import com.revature.exceptions.EmailUnavailibleException;
+import com.revature.exceptions.InvalidRequestException;
+import com.revature.exceptions.UsernameUnavailibleException;
 import com.revature.models.User;
 import com.revature.repos.UserRepository;
 import com.revature.security.JwtConfig;
@@ -48,30 +51,37 @@ public class AuthController {
         return ResponseEntity.ok(user);
     }
 
-    //TODO proper Exceptions for username and email taken
     @PostMapping(name = "/register",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> registerUser(@Valid @RequestBody UserDTO signUpRequest, HttpServletResponse resp) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+        User registerUser = new User();
+        registerUser.setUsername(signUpRequest.getUsername());
+        registerUser.setPassword(encoder.encode(signUpRequest.getPassword()));
+        registerUser.setEmail(signUpRequest.getEmail());
+        registerUser.setFirstName(signUpRequest.getFirstName());
+        registerUser.setLastName(signUpRequest.getLastName());
+        registerUser.setCity(signUpRequest.getCity());
+        registerUser.setState(signUpRequest.getState());
+
+        try{
+            userService.register(registerUser);
+        }catch (UsernameUnavailibleException e){
             return ResponseEntity
                     .badRequest()
                     .body("Error username is taken");
         }
-
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        catch (EmailUnavailibleException e){
             return ResponseEntity
                     .badRequest()
                     .body("Error email is taken");
+        }catch (InvalidRequestException e){
+            return ResponseEntity
+                    .badRequest()
+                    .body("Invalid information sent to API");
         }
 
-        // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        userRepository.save(user);
         CredentialsDTO credentialsDTO = new CredentialsDTO();
-        credentialsDTO.setUsername(user.getUsername());
-        credentialsDTO.setPassword(user.getPassword());
+        credentialsDTO.setUsername(registerUser.getUsername());
+        credentialsDTO.setPassword(registerUser.getPassword());
         return ResponseEntity.ok(authenticate(credentialsDTO,resp));
         }
     }

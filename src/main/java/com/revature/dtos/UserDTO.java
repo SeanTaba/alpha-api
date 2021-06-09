@@ -12,8 +12,15 @@ public class UserDTO {
     @NotEmpty
     private String password;
 
-    @NotEmpty
     private String email;
+
+    private String city;
+
+    private String state;
+
+    private String firstName;
+
+    private String lastName;
 
     private int id;
 
@@ -55,5 +62,37 @@ public class UserDTO {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }
