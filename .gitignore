@@ -23,8 +23,10 @@
 hs_err_pid*
 
 # IDE stuff
-.idea
-.iml
+.idea/
+*.iml
+*.properties
 
 #Build folders
 /target
+

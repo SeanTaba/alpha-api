@@ -1,9 +1,9 @@
 package com.revature.models;
 
-import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
@@ -14,17 +14,22 @@ public class User
     @Column(name = "user_id")
     private int id;
 
-    @NotNull
     @Column(unique = true, nullable = false)
     private String username;
 
-    @NotNull
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
 
     @Email
     @Column(nullable = false, unique = true)
     private String email;
+
 
     @NotNull
     @Column(nullable = false)
@@ -33,6 +38,24 @@ public class User
     @NotNull
     @Column(nullable = false)
     private String city;
+
+    public User(){
+        super();
+    }
+
+    public User(int id, String username, String password, String email) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
 
     public int getId()
     {
@@ -92,5 +115,21 @@ public class User
     public void setCity(String city)
     {
         this.city = city;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+
     }
 }
