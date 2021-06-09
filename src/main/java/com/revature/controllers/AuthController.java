@@ -15,10 +15,7 @@ import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -43,7 +40,7 @@ public class AuthController {
         this.jwtConfig = jwtConfig;
     }
 
-    @PostMapping(name = "/login",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PutMapping(name = "/login",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> authenticate(@RequestBody @Valid CredentialsDTO credentials, HttpServletResponse resp) {
         User user = userService.authenticate(credentials.getUsername(), encoder.encode(credentials.getPassword()));
         String jwt = tokenGenerator.createJwt(user);

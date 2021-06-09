@@ -45,7 +45,7 @@ public class TokenGenerator {
        JwtBuilder builder = Jwts.builder()
                                         .setId(claims.getId())
                                         .setSubject(claims.getSubject())
-                                        .setIssuer(claims.getIssuer())
+                                        .setIssuer("revature")
                                         .setIssuedAt(Date.from(issuedAt))
                                         .setExpiration(Date.from(expiration))
                                         .signWith(jwtConfig.getSigAlg(),jwtConfig.getSigningKey());
