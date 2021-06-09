@@ -1,7 +1,5 @@
 package com.revature.models;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
 public enum Role {
     ADMIN(5),
     DEV(4),
