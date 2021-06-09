@@ -30,6 +30,15 @@ public class User
     @Column(nullable = false, unique = true)
     private String email;
 
+
+    @NotNull
+    @Column(nullable = false)
+    private String state;
+
+    @NotNull
+    @Column(nullable = false)
+    private String city;
+
     public User(){
         super();
     }
@@ -46,6 +55,7 @@ public class User
         this.password = password;
         this.email = email;
     }
+
 
     public int getId()
     {
@@ -87,6 +97,25 @@ public class User
         this.email = email;
     }
 
+    public String getState()
+    {
+        return state;
+    }
+
+    public void setState(String state)
+    {
+        this.state = state;
+    }
+
+    public String getCity()
+    {
+        return city;
+    }
+
+    public void setCity(String city)
+    {
+        this.city = city;
+
     public String getFirstName() {
         return firstName;
     }
@@ -101,5 +130,6 @@ public class User
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+
     }
 }
