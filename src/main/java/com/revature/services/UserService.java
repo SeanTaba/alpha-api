@@ -52,17 +52,17 @@ public class UserService {
     //without passing in an entire user object
     public boolean isValid(String str, String fieldName) {
 
-        if (str == null || str.trim().isEmpty()) return true;
+        if (str == null || str.trim().isEmpty()) return false;
 
         switch (fieldName) {
             case "username":
-                return str.length() > 20;
+                return str.length() < 20;
             case "firstName":
             case "lastName":
-                return str.length() > 25;
+                return str.length() < 25;
             case "password":
             case "email":
-                return str.length() > 255;
+                return str.length() < 255;
             default:
                 return true;
         }
@@ -143,8 +143,9 @@ public class UserService {
     public User authenticate(String username, String password) throws AuthenticationException {
 
         try {
-            return userRepo.findUserByUsernameAndPassword(username, password)
+            User user = userRepo.findUserByUsernameAndPassword(username, password)
                     .orElseThrow(AuthenticationException::new);
+            return user;
         } catch (Exception e) {
             if (e instanceof ResourceNotFoundException) throw e;
             throw new DataSourceException(e);

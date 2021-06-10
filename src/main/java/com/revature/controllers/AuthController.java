@@ -14,6 +14,7 @@ import com.revature.security.TokenGenerator;
 import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,25 +41,28 @@ public class AuthController {
         this.jwtConfig = jwtConfig;
     }
 
-    @PutMapping(name = "/login",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @RequestMapping("/login")
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> authenticate(@RequestBody @Valid CredentialsDTO credentials, HttpServletResponse resp) {
-        User user = userService.authenticate(credentials.getUsername(), encoder.encode(credentials.getPassword()));
+        User user = userService.authenticate(credentials.getUsername(), credentials.getPassword());
+        user.setAuthorizationLevel(user.getAuthorizationLevel());
         String jwt = tokenGenerator.createJwt(user);
         resp.setHeader(jwtConfig.getHeader(), jwt);
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping(name = "/register",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> registerUser(@Valid @RequestBody UserDTO signUpRequest, HttpServletResponse resp) {
+    @RequestMapping("/register")
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> registerUser(@RequestBody UserDTO signUpRequest, HttpServletResponse resp) {
         User registerUser = new User();
         registerUser.setUsername(signUpRequest.getUsername());
-        registerUser.setPassword(encoder.encode(signUpRequest.getPassword()));
+        registerUser.setPassword(signUpRequest.getPassword());
         registerUser.setEmail(signUpRequest.getEmail());
         registerUser.setFirstName(signUpRequest.getFirstName());
         registerUser.setLastName(signUpRequest.getLastName());
         registerUser.setCity(signUpRequest.getCity());
         registerUser.setState(signUpRequest.getState());
-
+        registerUser.setAuthorizationLevel(2);
         try{
             userService.register(registerUser);
         }catch (UsernameUnavailibleException e){

@@ -4,6 +4,7 @@ package com.revature.models;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -20,10 +21,10 @@ public class User
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(nullable = false)
+    @Column(name = "last_name")
     private String lastName;
 
     @Email
@@ -39,6 +40,13 @@ public class User
     @Column(nullable = false)
     private String city;
 
+
+    @Column(name = "role")
+    private int authorizationLevel;
+
+    @Transient
+    private List<Role> roles = new ArrayList<>();
+
     public User(){
         super();
     }
@@ -48,12 +56,14 @@ public class User
         this.username = username;
         this.password = password;
         this.email = email;
+        this.roles.add(Role.BASIC_USER);
     }
 
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.roles.add(Role.BASIC_USER);
     }
 
     public User(String username, String password, String firstName, String lastName, String email, String state, String city) {
@@ -64,6 +74,19 @@ public class User
         this.email = email;
         this.state = state;
         this.city = city;
+    }
+
+    public User(int id, String username, String password, String firstName, String lastName, String email, String state, String city, int authorizationLevel) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.state = state;
+        this.city = city;
+        this.authorizationLevel = authorizationLevel;
+        setAuthorizationLevel(authorizationLevel);
     }
 
     public int getId()
@@ -139,6 +162,23 @@ public class User
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
 
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Role roles) {
+        authorizationLevel = Role.valueOf(roles);
+        this.roles = Role.getRole(authorizationLevel);
+
+    }
+    public void setAuthorizationLevel(int authorization) {
+        authorizationLevel = authorization;
+        this.roles = Role.getRole(authorizationLevel);
+
+    }
+    public int getAuthorizationLevel() {
+        return authorizationLevel;
     }
 }

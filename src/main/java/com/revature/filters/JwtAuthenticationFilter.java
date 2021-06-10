@@ -18,25 +18,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    @Autowired
     private JwtUtility jwtUtils;
-
+    @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
     public JwtAuthenticationFilter(){
         super();
-    }
-
-    @Autowired
-    public void setJwtUtils(JwtUtility jwtUtils) {
-        this.jwtUtils = jwtUtils;
-    }
-
-    @Autowired
-    public void setUserDetailsService(UserDetailsServiceImpl userDetailsService) {
-        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -50,8 +40,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-                        null);
-//                userDetails.getAuthorities()
+                        userDetails.getAuthorities());
+
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
