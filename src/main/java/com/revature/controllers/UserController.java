@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/users")
 public class UserController
 {
 
@@ -46,8 +47,8 @@ public class UserController
     }
 
     //this will be hit only when weather change == truthy on the UI side
-    @GetMapping(name="/sendUpdate",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> sendWeatherUpdate (@Valid @RequestBody String email, @Valid @RequestBody String content) {
+    @GetMapping(name="/sendWeatherUpdate",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> sendWeatherUpdate (@Valid @RequestBody String email, @Valid @RequestBody String content, HttpServletResponse resp) {
         Mail mail = new Mail();
         MailServiceImpl mailService = new MailServiceImpl();
         mail.setMailFrom("AlphaCast");
@@ -58,6 +59,9 @@ public class UserController
             mailService.sendEmail(mail);
         }catch (Exception e){
             e.printStackTrace();
+        }
+        if (resp.getStatus() == 401){
+            System.out.println("not signed in");
         }
 
         return ResponseEntity.ok("email sent");
