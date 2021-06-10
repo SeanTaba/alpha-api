@@ -19,9 +19,9 @@ public class MyApplication
         mail.setMailSubject("AlphaCast - Weather Update");
         mail.setMailContent("Hey *Insert User's First Name* !\n Here's is your weather update!\n *insert forcast widget attachment* ");
 
-
-        ApplicationContext applicationContext = SpringApplication.run(MyApplication.class, args);
-        MailService mailService = (MailService) applicationContext.getBean("mailService");
-        mailService.sendEmail(mail);
+        SpringApplication.run(MyApplication.class, args);
+//        ApplicationContext applicationContext = SpringApplication.run(MyApplication.class, args);
+//        MailService mailService = (MailService) applicationContext.getBean("mailService");
+//        mailService.sendEmail(mail);
     }
 }

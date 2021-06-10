@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import static org.springframework.http.MediaType.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("auth")
 public class AuthController {
 
    private UserRepository userRepository;
@@ -38,6 +38,7 @@ public class AuthController {
         this.userService = userService;
         this.tokenGenerator = tokenGenerator;
         this.jwtConfig = jwtConfig;
+
     }
 
     @PutMapping(name = "/login",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)

@@ -7,6 +7,7 @@ import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.DataSourceException;
 import com.revature.exceptions.ResourceNotFoundException;
 import com.revature.models.User;
+import com.revature.services.MailService;
 
 import com.revature.repos.UserRepository;
 import com.revature.models.User;
@@ -68,6 +69,8 @@ public class UserService {
         }
 
     }
+
+
 
     //checks if all users fields are valid by passing in a user object
     public void isUserValid(User user) throws InvalidRequestException{
