@@ -21,10 +21,10 @@ public class User
     @Column(nullable = false)
     private String password;
 
-
+    @Column(name = "first_name")
     private String firstName;
 
-
+    @Column(name = "last_name")
     private String lastName;
 
     @Email
@@ -41,7 +41,7 @@ public class User
     private String city;
 
 
-    @Column()
+    @Column(name = "role")
     private int authorizationLevel;
 
     @Transient
@@ -49,8 +49,6 @@ public class User
 
     public User(){
         super();
-        this.roles.add(Role.BASIC_USER);
-        authorizationLevel = 2;
     }
 
     public User(int id, String username, String password, String email) {
@@ -59,7 +57,6 @@ public class User
         this.password = password;
         this.email = email;
         this.roles.add(Role.BASIC_USER);
-        authorizationLevel = 2;
     }
 
     public User(String username, String password, String email) {
@@ -67,7 +64,6 @@ public class User
         this.password = password;
         this.email = email;
         this.roles.add(Role.BASIC_USER);
-        authorizationLevel = 2;
     }
 
     public User(String username, String password, String firstName, String lastName, String email, String state, String city) {
@@ -78,8 +74,6 @@ public class User
         this.email = email;
         this.state = state;
         this.city = city;
-        this.roles.add(Role.BASIC_USER);
-        authorizationLevel = 2;
     }
 
     public User(int id, String username, String password, String firstName, String lastName, String email, String state, String city, int authorizationLevel) {
@@ -183,5 +177,8 @@ public class User
         authorizationLevel = authorization;
         this.roles = Role.getRole(authorizationLevel);
 
+    }
+    public int getAuthorizationLevel() {
+        return authorizationLevel;
     }
 }
