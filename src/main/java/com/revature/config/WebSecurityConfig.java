@@ -3,6 +3,7 @@ package com.revature.config;
 import com.revature.filters.JwtAuthenticationFilter;
 import com.revature.security.AuthEntryPointJwt;
 import com.revature.security.JwtConfig;
+import com.revature.security.JwtUtility;
 import com.revature.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,9 +26,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserDetailsService userDetailService;
+    private UserDetailsServiceImpl userDetailService;
     private AuthEntryPointJwt unauthorizedHandler;
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
 
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -40,9 +41,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Autowired
-    public void jwtAuthenticationFilter(JwtAuthenticationFilter jwtAuthenticationFilter1){
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter1;
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(){
+        return new JwtAuthenticationFilter();
     }
 
     @Bean
@@ -68,6 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/auth/**").permitAll()
                 .antMatchers("/test/**").permitAll()
                 .anyRequest().authenticated();
+        http.addFilterBefore(jwtAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class);
     }
 
 }

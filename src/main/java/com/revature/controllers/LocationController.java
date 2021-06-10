@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.models.Location;
 import com.revature.repos.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +28,8 @@ public class LocationController
         this.locationRepository = locationRepository;
     }
 
+//    Use this format to secure methods to only be available to specific users, will check JWT permissions
+//    @PreAuthorize("hasRole('BASIC_USER')")
     @RequestMapping("/coordinates")
     public String getCoordinates(@RequestParam String country, @RequestParam String state, @RequestParam String city)
     {
