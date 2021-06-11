@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.dtos.EmailInfoDTO;
 import com.revature.models.Mail;
 import com.revature.models.User;
 import com.revature.repos.LocationRepository;
@@ -24,6 +25,7 @@ import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
@@ -32,13 +34,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("users")
 public class UserController
 {
 
     private final UserRepository userRepository;
     private final LocationRepository locationRepository;
-    private MailServiceImpl mailService;
 
     @Autowired
     public UserController(UserRepository userRepository, LocationRepository locationRepository) {
@@ -46,27 +47,29 @@ public class UserController
         this.locationRepository = locationRepository;
     }
 
-    //this will be hit only when weather change == truthy on the UI side
-    @GetMapping(name="/sendWeatherUpdate",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> sendWeatherUpdate (@Valid @RequestBody String email, @Valid @RequestBody String content, HttpServletResponse resp) {
-        Mail mail = new Mail();
-        MailServiceImpl mailService = new MailServiceImpl();
-        mail.setMailFrom("AlphaCast");
-        mail.setMailTo(email);
-        mail.setMailSubject("AlphaCast - Weather Update");
-        mail.setMailContent(content);
-        try{
-            mailService.sendEmail(mail);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        if (resp.getStatus() == 401){
-            System.out.println("not signed in");
-        }
-
-        return ResponseEntity.ok("email sent");
-
-    }
+//    //this will be hit only when weather change == truthy on the UI side
+//    @PostMapping(name="/sendWeatherUpdate",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+//    public ResponseEntity<EmailInfoDTO> sendWeatherUpdate ( @RequestBody EmailInfoDTO emailInfo) {
+//        Mail mail = new Mail();
+//        MailServiceImpl mailService = new MailServiceImpl();
+////        if (req.getHeader("Authorization") != null ){
+//            mail.setMailFrom("AlphaCast");
+//            mail.setMailTo(emailInfo.getUserEmail());
+//            mail.setMailSubject("AlphaCast - Weather Update");
+//            mail.setMailContent(emailInfo.getEmailContent());
+//            try{
+//                mailService.sendEmail(mail);
+//            }catch (Exception e){
+//                e.printStackTrace();
+//                return ResponseEntity.ok(emailInfo);
+//            }
+//
+////        }
+//
+//
+//        return ResponseEntity.ok(emailInfo);
+//
+//    }
 
 //    @RequestMapping("/getUserByEmail")
 //    public User getUserById(@RequestParam String uem)

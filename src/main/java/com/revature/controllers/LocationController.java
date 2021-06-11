@@ -29,6 +29,7 @@ public class LocationController
     }
 
 //    Use this format to secure methods to only be available to specific users, will check JWT permissions
+
 //    @PreAuthorize("hasRole('BASIC_USER')")
     @RequestMapping("/coordinates")
     public String getCoordinates(@RequestParam String country, @RequestParam String state, @RequestParam String city)

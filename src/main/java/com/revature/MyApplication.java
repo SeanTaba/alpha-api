@@ -20,8 +20,6 @@ public class MyApplication
         mail.setMailContent("Hey *Insert User's First Name* !\n Here's is your weather update!\n *insert forcast widget attachment* ");
 
         SpringApplication.run(MyApplication.class, args);
-//        ApplicationContext applicationContext = SpringApplication.run(MyApplication.class, args);
-//        MailService mailService = (MailService) applicationContext.getBean("mailService");
-//        mailService.sendEmail(mail);
+
     }
 }

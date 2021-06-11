@@ -1,16 +1,20 @@
 package com.revature.controllers;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.revature.dtos.CredentialsDTO;
+import com.revature.dtos.EmailInfoDTO;
 import com.revature.dtos.UserDTO;
 import com.revature.exceptions.EmailUnavailibleException;
 import com.revature.exceptions.InvalidRequestException;
 import com.revature.exceptions.UsernameUnavailibleException;
+import com.revature.models.Mail;
 import com.revature.models.User;
 import com.revature.repos.UserRepository;
 import com.revature.security.JwtConfig;
 import com.revature.security.TokenGenerator;
+import com.revature.services.MailServiceImpl;
 import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,14 +35,16 @@ public class AuthController {
    private UserService userService;
    private TokenGenerator tokenGenerator;
    private JwtConfig jwtConfig;
+   private MailServiceImpl mailService;
 
     @Autowired
-    public AuthController(UserRepository userRepository, PasswordEncoder encoder,UserService userService, TokenGenerator tokenGenerator, JwtConfig jwtConfig) {
+    public AuthController(UserRepository userRepository, PasswordEncoder encoder,UserService userService, TokenGenerator tokenGenerator, JwtConfig jwtConfig, MailServiceImpl mailService) {
         this.userRepository = userRepository;
         this.encoder = encoder;
         this.userService = userService;
         this.tokenGenerator = tokenGenerator;
         this.jwtConfig = jwtConfig;
+        this.mailService = mailService;
 
     }
 
@@ -86,5 +92,33 @@ public class AuthController {
         credentialsDTO.setPassword(registerUser.getPassword());
         return ResponseEntity.ok(authenticate(credentialsDTO,resp));
         }
+    //@PreAuthorize("hasRole('BASIC_USER')")
+    //this will be hit only when weather change == truthy on the UI side
+    @PostMapping(value="/sendWeatherUpdate",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<EmailInfoDTO> sendWeatherUpdate (@RequestBody EmailInfoDTO emailInfo) {
+        Mail mail = new Mail();
+        System.out.println("you've hit the emailUpdater");
+        System.out.println(emailInfo.getEmailContent()+"\n"+emailInfo.getUserEmail());
+
+//        if (req.getHeader("Authorization") != null ){
+        mail.setMailFrom("AlphaCast");
+        mail.setMailTo(emailInfo.getUserEmail());
+        mail.setMailSubject("AlphaCast - Weather Update");
+        mail.setMailContent(emailInfo.getEmailContent());
+        mailService.sendEmail(mail);
+//        try{
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return ResponseEntity.ok(emailInfo);
+//        }
+
+//        }
+
+
+        return ResponseEntity.ok(emailInfo);
+
+    }
+
     }
 

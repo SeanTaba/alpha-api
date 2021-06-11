@@ -22,6 +22,7 @@ public class MailServiceImpl implements MailService {
     @Override
     public void sendEmail(Mail mail) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
+
         try{
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,true);
 
