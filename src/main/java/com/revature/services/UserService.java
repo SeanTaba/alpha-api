@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -151,5 +152,9 @@ public class UserService {
             throw new DataSourceException(e);
         }
 
+    }
+
+    public User getUserByUsername(String username) throws InvalidRequestException{
+        return userRepo.findUserByUsername(username).orElseThrow( () -> new InvalidRequestException("Username not found"));
     }
 }

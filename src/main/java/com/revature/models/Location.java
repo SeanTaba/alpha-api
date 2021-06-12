@@ -139,4 +139,19 @@ public class Location
     {
         return new CoordinatesPair<>(latitude,longitude).toString();
     }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", state='" + state + '\'' +
+                ", stateId='" + stateId + '\'' +
+                ", county='" + county + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", timezone='" + timezone + '\'' +
+                '}';
+    }
 }
