@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.dtos.CityStateLocationDTO;
 import com.revature.dtos.CoordinatesPair;
+import com.revature.dtos.EventDTO;
 import com.revature.exceptions.InvalidRequestException;
 import com.revature.models.Event;
 import com.revature.models.User;
@@ -41,12 +42,6 @@ public class EventController {
         this.locationService = locationService;
         this.jwtUtility = utility;
         this.userService = userService;
-    }
-
-    @GetMapping("/")
-    public String test()
-    {
-        return "";
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -95,12 +90,27 @@ public class EventController {
         ObjectMapper mapper = new ObjectMapper();
         try{
             User user = userService.getUserByUsername(username);
-            String jsonRet = mapper.writeValueAsString(eventRepository.getEventByUserId(user.getId()));
+            String jsonRet = mapper.writeValueAsString(eventAPIService.getUserEvents(user));
             return ResponseEntity.accepted().body(jsonRet);
         }catch(InvalidRequestException | JsonProcessingException e){
             return ResponseEntity.badRequest().body(mapper.writeValueAsString(e));
         }
     }
 
+    @RequestMapping("/save")
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> saveEvent(@RequestBody EventDTO event){
+       Event eventToSave = new Event();
+       eventToSave.setEvent_id(event.getEventId());
+       eventToSave.setEvent_url(event.getEventUrl());
+       eventToSave.setUser_id(event.getUserId());
+       eventToSave.setEvent_description(event.getEventDescription());
+       eventToSave.setEvent_date(event.getEventDate());
+       eventToSave.setEvent_title(event.getEventTitle());
+       eventAPIService.saveEvent(eventToSave);
+
+       return ResponseEntity.accepted().body(eventToSave);
+
+    }
 
 }
