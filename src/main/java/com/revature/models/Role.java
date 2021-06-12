@@ -1,7 +1,5 @@
 package com.revature.models;
 
-import io.swagger.models.auth.In;
-
 import java.util.*;
 
 public enum Role {

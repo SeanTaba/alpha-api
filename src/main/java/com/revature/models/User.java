@@ -1,6 +1,9 @@
 package com.revature.models;
 
 
+import com.revature.dtos.CityStateLocationDTO;
+import com.revature.dtos.CredentialsDTO;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -76,15 +79,15 @@ public class User
         this.city = city;
     }
 
-    public User(int id, String username, String password, String firstName, String lastName, String email, String state, String city, int authorizationLevel) {
+    public User(int id, CredentialsDTO credentialsDTO, String firstName, String lastName, String email, CityStateLocationDTO cityStateLocationDTO, int authorizationLevel) {
         this.id = id;
-        this.username = username;
-        this.password = password;
+        this.username = credentialsDTO.getUsername();
+        this.password = credentialsDTO.getPassword();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.state = state;
-        this.city = city;
+        this.state = cityStateLocationDTO.getState();
+        this.city = cityStateLocationDTO.getCity();
         this.authorizationLevel = authorizationLevel;
         setAuthorizationLevel(authorizationLevel);
     }

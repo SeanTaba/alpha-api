@@ -47,7 +47,7 @@ public class Location
 
     public void setId(int id)
     {
-        id = id;
+        this.id = id;
     }
 
     public String getCity()
@@ -138,5 +138,20 @@ public class Location
     public String getCoordinatesString()
     {
         return new CoordinatesPair<>(latitude,longitude).toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", state='" + state + '\'' +
+                ", stateId='" + stateId + '\'' +
+                ", county='" + county + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", timezone='" + timezone + '\'' +
+                '}';
     }
 }
