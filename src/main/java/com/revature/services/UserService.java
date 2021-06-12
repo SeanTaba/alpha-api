@@ -6,17 +6,21 @@ import com.revature.exceptions.*;
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.DataSourceException;
 import com.revature.exceptions.ResourceNotFoundException;
+import com.revature.models.Mail;
 import com.revature.models.User;
 import com.revature.services.MailService;
 
 import com.revature.repos.UserRepository;
 import com.revature.models.User;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -110,6 +114,7 @@ public class UserService {
 //
 //        return false;
 //    }
+
 
     //checks username availability
     @Transactional(propagation = Propagation.SUPPORTS)

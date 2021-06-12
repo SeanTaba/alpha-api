@@ -27,7 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import static org.springframework.http.MediaType.*;
 
 @RestController
-@RequestMapping("auth")
+@CrossOrigin("*")
+@RequestMapping("/auth")
 public class AuthController {
 
    private UserRepository userRepository;
@@ -52,6 +53,7 @@ public class AuthController {
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> authenticate(@RequestBody @Valid CredentialsDTO credentials, HttpServletResponse resp) {
         User user = userService.authenticate(credentials.getUsername(), credentials.getPassword());
+        System.out.println(user);
         user.setAuthorizationLevel(user.getAuthorizationLevel());
         String jwt = tokenGenerator.createJwt(user);
         resp.setHeader(jwtConfig.getHeader(), jwt);
@@ -70,6 +72,7 @@ public class AuthController {
         registerUser.setCity(signUpRequest.getCity());
         registerUser.setState(signUpRequest.getState());
         registerUser.setAuthorizationLevel(2);
+        registerUser.setWantsWeeklyUpdates(signUpRequest.getWantsWeeklyUpdates());
         try{
             userService.register(registerUser);
         }catch (UsernameUnavailibleException e){
@@ -92,33 +95,7 @@ public class AuthController {
         credentialsDTO.setPassword(registerUser.getPassword());
         return ResponseEntity.ok(authenticate(credentialsDTO,resp));
         }
-    //@PreAuthorize("hasRole('BASIC_USER')")
-    //this will be hit only when weather change == truthy on the UI side
-    @PostMapping(value="/sendWeatherUpdate",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmailInfoDTO> sendWeatherUpdate (@RequestBody EmailInfoDTO emailInfo) {
-        Mail mail = new Mail();
-        System.out.println("you've hit the emailUpdater");
-        System.out.println(emailInfo.getEmailContent()+"\n"+emailInfo.getUserEmail());
 
-//        if (req.getHeader("Authorization") != null ){
-        mail.setMailFrom("AlphaCast");
-        mail.setMailTo(emailInfo.getUserEmail());
-        mail.setMailSubject("AlphaCast - Weather Update");
-        mail.setMailContent(emailInfo.getEmailContent());
-        mailService.sendEmail(mail);
-//        try{
-//
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return ResponseEntity.ok(emailInfo);
-//        }
-
-//        }
-
-
-        return ResponseEntity.ok(emailInfo);
-
-    }
 
     }
 

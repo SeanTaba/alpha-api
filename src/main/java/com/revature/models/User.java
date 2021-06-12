@@ -47,6 +47,9 @@ public class User
     @Transient
     private List<Role> roles = new ArrayList<>();
 
+    @Column(name = "wants_Updates",nullable = false)
+    private Boolean wantsWeeklyUpdates;
+
     public User(){
         super();
     }
@@ -76,7 +79,7 @@ public class User
         this.city = city;
     }
 
-    public User(int id, String username, String password, String firstName, String lastName, String email, String state, String city, int authorizationLevel) {
+    public User(int id, String username, String password, String firstName, String lastName, String email, String state, String city, int authorizationLevel, Boolean wantsWeeklyUpdates) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -87,6 +90,7 @@ public class User
         this.city = city;
         this.authorizationLevel = authorizationLevel;
         setAuthorizationLevel(authorizationLevel);
+        this.wantsWeeklyUpdates = wantsWeeklyUpdates;
     }
 
     public int getId()
@@ -180,5 +184,13 @@ public class User
     }
     public int getAuthorizationLevel() {
         return authorizationLevel;
+    }
+
+    public Boolean getWantsWeeklyUpdates() {
+        return wantsWeeklyUpdates;
+    }
+
+    public void setWantsWeeklyUpdates(Boolean wantsWeeklyUpdates) {
+        this.wantsWeeklyUpdates = wantsWeeklyUpdates;
     }
 }

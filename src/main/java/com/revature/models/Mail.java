@@ -1,6 +1,8 @@
 package com.revature.models;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import com.revature.dtos.UserDTO;
 
 public class Mail {
@@ -11,8 +13,39 @@ public class Mail {
     private String mailSubject;
     private String mailContent;
     private String contentType;
+    private  String attachmentString;
+    private Map<String,Object> props;
 
     private List<Object> attachments;
+    private Object obj;
+
+    public String getAttactchmentResource() {
+        return attactchmentResource;
+    }
+
+    public void setAttactchmentResource(String attactchmentResource) {
+        this.attactchmentResource = attactchmentResource;
+    }
+
+    private String attactchmentResource;
+
+    public void setAttachmentString(String attachmentString) {
+        this.attachmentString = attachmentString;
+    }
+
+    public Object getObj() {
+        return obj;
+    }
+
+    public void setObj(Object obj) {
+        this.obj = obj;
+    }
+
+    public void setAttachmentResource(String attachmentResource) {
+        this.attachmentResource = attachmentResource;
+    }
+
+    private String attachmentResource;
 
     public Mail(){
         contentType = "text/plain";
@@ -79,5 +112,24 @@ public class Mail {
 
     public void setAttachments(List<Object> attachments) {
         this.attachments = attachments;
+    }
+
+    public String getAttachmentString() {
+        return attachmentString;
+    }
+    public void setAttachmentString(){
+        this.attachmentString = attachmentString;
+    }
+
+    public Map<String, Object> getProps() {
+        return props;
+    }
+
+    public String getAttachmentResource() {
+        return attachmentResource = attactchmentResource;
+    }
+
+    public void setProps(Map<String, Object> model) {
+        this.props = props;
     }
 }
