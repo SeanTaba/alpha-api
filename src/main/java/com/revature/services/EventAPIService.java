@@ -17,8 +17,8 @@ import java.util.*;
 @Service
 public class EventAPIService {
 
-    private String client_id = "MjIyMDIzMzR8MTYyMzM2MzAzNC41MTgwMjA2";
-    private String client_secret = "c66dd9c8237fafc6723abc430068fef7563b040d1481779c7193c240b6dad6a0";
+    private String clientId = "MjIyMDIzMzR8MTYyMzM2MzAzNC41MTgwMjA2";
+    private String clientSecret = "c66dd9c8237fafc6723abc430068fef7563b040d1481779c7193c240b6dad6a0";
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
     @SuppressWarnings("unchecked")
@@ -26,7 +26,7 @@ public class EventAPIService {
         List<Event> returnEvents = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         builder.append("https://api.seatgeek.com/2/events?per_page=50")
-                .append(MessageFormat.format("&lat={0}&lon={1}&client_id={2}&client_secret={3}", lat, lon, client_id, client_secret));
+                .append(MessageFormat.format("&lat={0}&lon={1}&clientId={2}&clientSecret={3}", lat, lon, clientId, clientSecret));
         URL urlRequest = new URL(builder.toString());
         HttpURLConnection connection = (HttpURLConnection) urlRequest.openConnection();
 
@@ -51,14 +51,13 @@ public class EventAPIService {
                 }
             }
         }
-        System.out.println(returnEvents.size());
         return returnEvents;
     }
 
     public Event getEvent(String eventId) throws IOException, ParseException {
         Event event = new Event();
         String builder = "https://api.seatgeek.com/2/events" +
-                MessageFormat.format("/{0}?client_id={1}&client_secret={2}", eventId, client_id, client_secret);
+                MessageFormat.format("/{0}?clientId={1}&clientSecret={2}", eventId, clientId, clientSecret);
         URL urlRequest = new URL(builder);
         HttpURLConnection connection = (HttpURLConnection) urlRequest.openConnection();
 

@@ -8,14 +8,11 @@ import com.revature.exceptions.EmailUnavailibleException;
 import com.revature.exceptions.InvalidRequestException;
 import com.revature.exceptions.UsernameUnavailibleException;
 import com.revature.models.User;
-import com.revature.repos.UserRepository;
 import com.revature.security.JwtConfig;
 import com.revature.security.TokenGenerator;
 import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,16 +23,12 @@ import static org.springframework.http.MediaType.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-   private UserRepository userRepository;
-   private PasswordEncoder encoder;
    private UserService userService;
    private TokenGenerator tokenGenerator;
    private JwtConfig jwtConfig;
 
     @Autowired
-    public AuthController(UserRepository userRepository, PasswordEncoder encoder,UserService userService, TokenGenerator tokenGenerator, JwtConfig jwtConfig) {
-        this.userRepository = userRepository;
-        this.encoder = encoder;
+    public AuthController(UserService userService, TokenGenerator tokenGenerator, JwtConfig jwtConfig) {
         this.userService = userService;
         this.tokenGenerator = tokenGenerator;
         this.jwtConfig = jwtConfig;

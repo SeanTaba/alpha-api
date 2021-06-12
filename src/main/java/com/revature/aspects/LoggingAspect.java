@@ -16,7 +16,9 @@ public class LoggingAspect {
     private final Logger logger = LogManager.getLogger();
 
     @Pointcut("within(com.revature..*) && !within(com.revature.filters..*)")
-    public void logAll() {}
+    public void logAll() {
+       logger.info("logging");
+    }
 
     @Before("logAll()")
     public void logMethodStart(JoinPoint jp) {

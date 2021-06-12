@@ -7,10 +7,8 @@ import com.revature.dtos.CityStateLocationDTO;
 import com.revature.dtos.CoordinatesPair;
 import com.revature.exceptions.InvalidRequestException;
 import com.revature.models.Event;
-import com.revature.models.Location;
 import com.revature.models.User;
 import com.revature.repos.EventRepository;
-import com.revature.repos.UserRepository;
 import com.revature.security.JwtUtility;
 import com.revature.services.EventAPIService;
 import com.revature.services.LocationService;
@@ -19,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.jws.Oneway;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -31,11 +27,11 @@ import java.util.List;
 @RequestMapping("/events")
 public class EventController {
 
-    private EventRepository eventRepository;
-    private EventAPIService eventAPIService;
-    private LocationService locationService;
-    private JwtUtility jwtUtility;
-    private UserService userService;
+    private final EventRepository eventRepository;
+    private final EventAPIService eventAPIService;
+    private final LocationService locationService;
+    private final JwtUtility jwtUtility;
+    private final UserService userService;
 
    @Autowired
     public EventController(EventRepository eventRepository, EventAPIService eventAPIService, LocationService locationService, JwtUtility utility, UserService userService)
@@ -62,7 +58,8 @@ public class EventController {
     @RequestMapping("/hometown")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getEventsAtHometown(HttpServletRequest req, HttpServletResponse res)throws IOException{
-        String username = jwtUtility.getUserNameFromJwtToken((String) req.getAttribute("Authorize: "));
+        String jwtHeader = req.getHeader("Authorization");
+       String username = jwtUtility.getUserNameFromJwtToken(jwtHeader);
         ObjectMapper mapper = new ObjectMapper();
         try{
             User user = userService.getUserByUsername(username);
@@ -93,7 +90,8 @@ public class EventController {
     @RequestMapping("/user")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getUsersSavedEvents(HttpServletRequest req, HttpServletResponse res) throws JsonProcessingException {
-        String username = jwtUtility.getUserNameFromJwtToken((String) req.getAttribute("Authorize: "));
+        String jwtHeader = req.getHeader("Authorization");
+        String username = jwtUtility.getUserNameFromJwtToken(jwtHeader);
         ObjectMapper mapper = new ObjectMapper();
         try{
             User user = userService.getUserByUsername(username);
