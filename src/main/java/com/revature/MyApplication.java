@@ -28,53 +28,52 @@ import java.util.Map;
 @SpringBootApplication
 @EnableScheduling
 @ComponentScan(basePackages = {"com.revature"})
-public class MyApplication implements ApplicationRunner
-{
+public class MyApplication implements ApplicationRunner {
     @Autowired
     private UserService userService;
     @Autowired
     MailServiceImpl mailService;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         System.out.println("we made it here");
         SpringApplication.run(MyApplication.class, args);
 
     }
+
     @Override
     //@Scheduled(cron = "0 30 9 ? * MON")
-    public void run (ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) throws Exception {
         Mail mail = new Mail();
-        try {
-            List<User> subscriptionList = userService.getAllUsers();
-            for (User subscribedUser : subscriptionList) {
-                if (subscribedUser.getWantsWeeklyUpdates()) {
+        List<User> subscriptionList = userService.getAllUsers();
+        for (User subscribedUser : subscriptionList) {
+            System.out.println(subscribedUser.getWantsWeeklyUpdates());
+            try {
+                if (subscribedUser.getWantsWeeklyUpdates() == null) {
+                    continue;
+                }else if(subscribedUser.getWantsWeeklyUpdates())
                     mail.setMailFrom("AlphaCast");
                     mail.setMailTo(subscribedUser.getEmail());
                     mail.setMailSubject("AlphaCast - Weather Update");
                     //                mail.setMailContent(emailInfo.getEmailContent());
-                    Map<String, Object> model = new HashMap<>();
-                    model.put("name", subscribedUser.getFirstName());
-                    model.put("location", subscribedUser.getCity());
-                    model.put("sign", "Yours weatherly,\n" +
-                            "-The AlphaCast Team");
-                    mail.setProps(model);
+//                    Map<String, Object> model = new HashMap<>();
+//                    model.put("name", subscribedUser.getFirstName());
+//                    model.put("location", subscribedUser.getCity());
+//                    model.put("sign", "Yours weatherly,\n" +
+//                            "-The AlphaCast Team");
+//                    mail.setProps(model);
+                    mail.setMailContent("Hi " + subscribedUser.getFirstName() +" !\n" +
+                            "\tYour weekly forecast report for "+subscribedUser.getCity()+" is now ready !\n" +
+                            "-Alpha Cast Team");
                     try {
                         mailService.sendEmail(mail);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-                } else if (subscribedUser.getWantsWeeklyUpdates() == null) {
-                    System.out.println("This user does not have a preference yet");
-                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
         }
     }
 
-    }
 
-
-
+}

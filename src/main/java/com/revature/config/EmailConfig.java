@@ -4,10 +4,8 @@ package com.revature.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.stereotype.Component;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -69,21 +67,21 @@ public class EmailConfig {
         return mailSender;
 
     }
-    @Bean
-    public SpringTemplateEngine springTemplateEngine(){
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        templateEngine.addTemplateResolver(htmlTemplateResolver());
-        return templateEngine;
-    }
-
-    @Bean
-    public SpringResourceTemplateResolver htmlTemplateResolver(){
-        SpringResourceTemplateResolver emailTemplateResolver = new SpringResourceTemplateResolver();
-        emailTemplateResolver.setPrefix("/templates/");
-        emailTemplateResolver.setSuffix(".html");
-        emailTemplateResolver.setTemplateMode(TemplateMode.HTML);
-        emailTemplateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        return  emailTemplateResolver;
-    }
+//    @Bean
+//    public SpringTemplateEngine springTemplateEngine(){
+//        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+//        templateEngine.addTemplateResolver(htmlTemplateResolver());
+//        return templateEngine;
+//    }
+//
+//    @Bean
+//    public SpringResourceTemplateResolver htmlTemplateResolver(){
+//        SpringResourceTemplateResolver emailTemplateResolver = new SpringResourceTemplateResolver();
+//        emailTemplateResolver.setPrefix("resources/static/");
+//        emailTemplateResolver.setSuffix(".html");
+//        emailTemplateResolver.setTemplateMode(TemplateMode.HTML);
+//        emailTemplateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
+//        return  emailTemplateResolver;
+//    }
 
 }

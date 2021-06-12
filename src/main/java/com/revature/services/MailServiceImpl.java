@@ -39,16 +39,16 @@ public class MailServiceImpl implements MailService {
             mimeMessageHelper.setTo(mail.getMailTo());
 
 
-            mimeMessageHelper.addAttachment(mail.getAttachmentString(), new ClassPathResource(mail.getAttachmentResource()));
+            //mimeMessageHelper.addAttachment(mail.getAttachmentString(), new ClassPathResource(mail.getAttachmentResource()));
 
             Context context = new Context();
             context.setVariables(mail.getProps());
 
 
-
-
-            String html = templateEngine.process("newsletter-template",context);
-            mimeMessageHelper.setText(html,true);
+            //broken: can not find emailTemplate.html
+            //String html = templateEngine.process("emailTemplate",context);
+            //mimeMessageHelper.setText(html,true);
+            mimeMessageHelper.setText(mail.getMailContent());
             emailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (MessagingException | UnsupportedEncodingException messagingException) {
             messagingException.printStackTrace();
