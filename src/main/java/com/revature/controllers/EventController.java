@@ -1,6 +1,5 @@
 package com.revature.controllers;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.dtos.CityStateLocationDTO;
@@ -70,8 +69,8 @@ public class EventController {
     }
 
     @RequestMapping("/location")
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getEventsAtLocation(@RequestParam CityStateLocationDTO locationDTO) throws IOException, ParseException {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getEventsAtLocation(@RequestBody CityStateLocationDTO locationDTO) throws IOException, ParseException {
         CoordinatesPair<Double,Double> loc = locationService.getLatLonOfACity(locationDTO.getCity(),locationDTO.getState());
         ObjectMapper mapper = new ObjectMapper();
         String jsonRet = mapper.writeValueAsString(eventAPIService.getEvents(loc.getLatitude(),loc.getLongitude()));
@@ -79,8 +78,8 @@ public class EventController {
     }
 
     @RequestMapping("/id")
-    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getSpecificEvent(@RequestParam String eventId) throws IOException, ParseException {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getSpecificEvent(@RequestBody String eventId) throws IOException, ParseException {
         ObjectMapper mapper = new ObjectMapper();
         return ResponseEntity.accepted().body(mapper.writeValueAsString(eventAPIService.getEvent(eventId)));
     }
