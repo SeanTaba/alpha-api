@@ -4,6 +4,8 @@ import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
+
 @Component
 public class JwtUtility {
 
@@ -17,17 +19,22 @@ public class JwtUtility {
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtConfig.getSigningKey()).parseClaimsJws(token).getBody().getSubject();
+        // Needed to be explicit because when chained together couldnt see JWT token
+        JwtParser parser = Jwts.parser();
+        token = token.replaceFirst(": Bearer ","");
+        Key signingKey = jwtConfig.getSigningKey();
+        parser.setSigningKey(signingKey);
+        Jws<Claims> claimsJws = parser.parseClaimsJws(token);
+
+        return claimsJws.getBody().getSubject();
     }
 
     public boolean validateJwtToken(String authToken) throws ExpiredJwtException {
         try {
             Jwts.parser().setSigningKey(jwtConfig.getSigningKey()).parseClaimsJws(authToken);
             return true;
-        } catch (SignatureException e) {
-        } catch (MalformedJwtException e) {
-        } catch (UnsupportedJwtException e) {
-        } catch (IllegalArgumentException e) {
+        } catch (SignatureException | IllegalArgumentException | UnsupportedJwtException | MalformedJwtException e) {
+            e.printStackTrace();
         }
 
         return false;

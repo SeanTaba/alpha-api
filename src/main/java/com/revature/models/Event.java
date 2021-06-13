@@ -15,8 +15,8 @@ public class Event {
     private int event_id;
 
     @NotNull
-    @Column(nullable = false)
-    private int user_id;
+    @Column(nullable = false, name = "user_id")
+    private int userId;
 
     @NotNull
     @Column(nullable = false)
@@ -28,21 +28,20 @@ public class Event {
     @Column(nullable = false)
     private String event_title;
 
+
     public Event() {
 
     }
 
-    public Event(int event_id, int user_id, String event_url, Date event_date, String event_title, String event_description) {
+    public Event(int event_id, int user_id, String event_url, Date event_date, String event_title) {
         this.event_id = event_id;
-        this.user_id = user_id;
+        this.userId = user_id;
         this.event_url = event_url;
         this.event_date = event_date;
         this.event_title = event_title;
-        this.event_description = event_description;
     }
 
-    @Column
-    private String event_description;
+
 
     public int getEvent_id() {
         return event_id;
@@ -53,11 +52,11 @@ public class Event {
     }
 
     public int getUser_id() {
-        return user_id;
+        return userId;
     }
 
     public void setUser_id(int user_id) {
-        this.user_id = user_id;
+        this.userId = user_id;
     }
 
     public String getEvent_url() {
@@ -84,11 +83,15 @@ public class Event {
         this.event_title = event_title;
     }
 
-    public String getEvent_description() {
-        return event_description;
-    }
 
-    public void setEvent_description(String event_description) {
-        this.event_description = event_description;
+    @Override
+    public String toString() {
+        return "Event{" +
+                "event_id=" + event_id +
+                ", user_id=" + userId +
+                ", event_url='" + event_url + '\'' +
+                ", event_date=" + event_date +
+                ", event_title='" + event_title + '\'' +
+                '}';
     }
 }

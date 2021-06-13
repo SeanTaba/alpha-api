@@ -114,9 +114,7 @@ public class LocationController
     @RequestMapping("/getLocationByCountryAndState")
     public Set<Location> getLocationByCountryAndState(@RequestParam String cr, @RequestParam String st)
     {
-        Set<Location> locations = locationRepository.findLocationByCountryAndState(cr, st);
-        System.out.println(locations);
-        return locations; /*locationRepository.findLocationByCountryAndState(country, state);*/
+       return locationRepository.findLocationByCountryAndState(cr, st);
     }
 
     private Set<String> locationToString(Collection<Location> locations, Method method)

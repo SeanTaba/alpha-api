@@ -8,18 +8,25 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
 @RestControllerAdvice
 public class ExceptionHandlerAspect {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ResourceNotFoundException.class)
-    public void handleResourceNotFoundException() { }
+    public String handleResourceNotFoundException(ResourceNotFoundException e) {
+        return e.getMessage();
+    }
     
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthenticationException.class)
-    public void handleAuthenticationException() { }
+    public String handleAuthenticationException(AuthenticationException e) {
+        return e.getMessage();
+    }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AuthorizationException.class)
-    public void handleAuthorizationException() { }
+    public String handleAuthorizationException(AuthorizationException e) {
+        return e.getMessage();
+    }
 }

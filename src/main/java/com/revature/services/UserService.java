@@ -11,8 +11,6 @@ import com.revature.models.User;
 import com.revature.services.MailService;
 
 import com.revature.repos.UserRepository;
-import com.revature.models.User;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +23,11 @@ import java.util.Map;
 @Service
 @Transactional
 public class UserService {
+
     private UserRepository userRepo;
+
+    private static final  String EMAIL = "email";
+    private static final  String USERNAME = "username";
 
     @Autowired
     public UserService(UserRepository userDao) {
@@ -38,14 +40,13 @@ public class UserService {
 
         isUserValid(newUser);
 
-        if(userRepo.existsByUsername(newUser.getUsername())){
+        if(Boolean.TRUE.equals(userRepo.existsByUsername(newUser.getUsername()))){
             throw new UsernameUnavailibleException();
         }
-        if(userRepo.existsByEmail(newUser.getEmail())){
+        if(Boolean.TRUE.equals(userRepo.existsByEmail(newUser.getEmail()))){
             throw new EmailUnavailibleException();
         }
         return userRepo.save(newUser);
-
     }
 
     //gets all users from repo
@@ -60,13 +61,13 @@ public class UserService {
         if (str == null || str.trim().isEmpty()) return false;
 
         switch (fieldName) {
-            case "username":
+            case USERNAME:
                 return str.length() < 20;
             case "firstName":
             case "lastName":
                 return str.length() < 25;
             case "password":
-            case "email":
+            case EMAIL:
                 return str.length() < 255;
             default:
                 return true;
@@ -81,14 +82,14 @@ public class UserService {
         if (user == null) {
             throw new InvalidRequestException("User is null");
         }
-        if (!isValid(user.getUsername(), "username")) {
+        if (!isValid(user.getUsername(), USERNAME)) {
             throw new InvalidRequestException("Invalid username");
         }
 
         if (!isValid(user.getPassword(), "password")) {
             throw new InvalidRequestException("Invalid password");
         }
-        if (!isValid(user.getEmail(), "email")) {
+        if (!isValid(user.getEmail(), EMAIL)) {
             throw new InvalidRequestException("Invalid Email");
         }
         if (!isValid(user.getFirstName(), "firstName")) {
@@ -98,6 +99,7 @@ public class UserService {
             throw new InvalidRequestException("Invalid LastName");
         }
     }
+
 
 //    public Boolean isPasswordSecure(User verifyUser){
 //        String password = verifyUser.getPassword();
@@ -116,48 +118,50 @@ public class UserService {
 //    }
 
 
+
     //checks username availability
-    @Transactional(propagation = Propagation.SUPPORTS)
+//    @Transactional(propagation = Propagation.SUPPORTS)
     public Boolean isUsernameAvailable(String username) {
 
-        if(!isValid(username, "username")){
+        if(!isValid(username, USERNAME)){
             throw new InvalidRequestException("Invalid username");
         }
         try{
             return userRepo.isUsernameAvailable(username);
-        }catch(Exception e){
+        }catch(ResourceNotFoundException e){
             throw new DataSourceException(e);
         }
     }
 
     //checks email availability
-    @Transactional(propagation = Propagation.SUPPORTS)
+//    @Transactional(propagation = Propagation.SUPPORTS)
     public Boolean isEmailAvailable(String email) {
-       if(!isValid(email, "email")){
+       if(!isValid(email, EMAIL)){
+
            throw new InvalidRequestException("Invalid email");
        }
        try {
            return userRepo.isEmailAvailable(email);
-       }catch(Exception e){
-           if (e instanceof ResourceNotFoundException) {
-               throw e;
-           }
-           throw new DataSourceException(e);
+       }catch(ResourceNotFoundException e){
+          throw new DataSourceException(e);
        }
     }
 
 
     @Transactional(readOnly = true)
     public User authenticate(String username, String password) throws AuthenticationException {
-
+        User user = null;
         try {
-            User user = userRepo.findUserByUsernameAndPassword(username, password)
+           user = userRepo.findUserByUsernameAndPassword(username, password)
                     .orElseThrow(AuthenticationException::new);
-            return user;
-        } catch (Exception e) {
-            if (e instanceof ResourceNotFoundException) throw e;
-            throw new DataSourceException(e);
-        }
 
+        } catch (ResourceNotFoundException | DataSourceException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    public User getUserByUsername(String username) throws InvalidRequestException{
+        return userRepo.findUserByUsername(username).orElseThrow( () -> new InvalidRequestException("Username not found"));
     }
 }

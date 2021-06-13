@@ -11,15 +11,12 @@ import com.revature.exceptions.InvalidRequestException;
 import com.revature.exceptions.UsernameUnavailibleException;
 import com.revature.models.Mail;
 import com.revature.models.User;
-import com.revature.repos.UserRepository;
 import com.revature.security.JwtConfig;
 import com.revature.security.TokenGenerator;
 import com.revature.services.MailServiceImpl;
 import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,17 +28,13 @@ import static org.springframework.http.MediaType.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-   private UserRepository userRepository;
-   private PasswordEncoder encoder;
    private UserService userService;
    private TokenGenerator tokenGenerator;
    private JwtConfig jwtConfig;
    private MailServiceImpl mailService;
 
     @Autowired
-    public AuthController(UserRepository userRepository, PasswordEncoder encoder,UserService userService, TokenGenerator tokenGenerator, JwtConfig jwtConfig, MailServiceImpl mailService) {
-        this.userRepository = userRepository;
-        this.encoder = encoder;
+    public AuthController(UserService userService, TokenGenerator tokenGenerator, JwtConfig jwtConfig, MailServiceImpl mailService) {
         this.userService = userService;
         this.tokenGenerator = tokenGenerator;
         this.jwtConfig = jwtConfig;
