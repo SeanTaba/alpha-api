@@ -35,7 +35,7 @@ public class EventAPIService {
         List<Event> returnEvents = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         builder.append("https://api.seatgeek.com/2/events?per_page=50")
-                .append(MessageFormat.format("&lat={0}&lon={1}&clientId={2}&clientSecret={3}", lat, lon, clientId, clientSecret));
+                .append(MessageFormat.format("&lat={0}&lon={1}&client_id={2}&client_secret={3}", lat, lon, clientId, clientSecret));
         URL urlRequest = new URL(builder.toString());
         HttpURLConnection connection = (HttpURLConnection) urlRequest.openConnection();
 
@@ -66,7 +66,7 @@ public class EventAPIService {
     public Event getEvent(String eventId) throws IOException, ParseException {
         Event event = new Event();
         String builder = "https://api.seatgeek.com/2/events" +
-                MessageFormat.format("/{0}?clientId={1}&clientSecret={2}", eventId, clientId, clientSecret);
+                MessageFormat.format("/{0}?client_id={1}&client_secret={2}", eventId, clientId, clientSecret);
         URL urlRequest = new URL(builder);
         HttpURLConnection connection = (HttpURLConnection) urlRequest.openConnection();
 

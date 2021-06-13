@@ -52,7 +52,7 @@ public class EventController {
 
     @RequestMapping("/hometown")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getEventsAtHometown(HttpServletRequest req, HttpServletResponse res)throws IOException{
+    public ResponseEntity<String> getEventsAtHometown(HttpServletRequest req, HttpServletResponse res)throws IOException{
         String jwtHeader = req.getHeader("Authorization");
        String username = jwtUtility.getUserNameFromJwtToken(jwtHeader);
         ObjectMapper mapper = new ObjectMapper();
@@ -68,7 +68,7 @@ public class EventController {
 
     @RequestMapping("/location")
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getEventsAtLocation(@RequestBody CityStateLocationDTO locationDTO) throws IOException, ParseException {
+    public ResponseEntity<String> getEventsAtLocation(@RequestBody CityStateLocationDTO locationDTO) throws IOException, ParseException {
         CoordinatesPair<Double,Double> loc = locationService.getLatLonOfACity(locationDTO.getCity(),locationDTO.getState());
         ObjectMapper mapper = new ObjectMapper();
         String jsonRet = mapper.writeValueAsString(eventAPIService.getEvents(loc.getLatitude(),loc.getLongitude()));
@@ -77,14 +77,14 @@ public class EventController {
 
     @RequestMapping("/id")
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getSpecificEvent(@RequestParam String eventId) throws IOException, ParseException {
+    public ResponseEntity<String> getSpecificEvent(@RequestParam String eventId) throws IOException, ParseException {
         ObjectMapper mapper = new ObjectMapper();
         return ResponseEntity.accepted().body(mapper.writeValueAsString(eventAPIService.getEvent(eventId)));
     }
 
     @RequestMapping("/user")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getUsersSavedEvents(HttpServletRequest req, HttpServletResponse res) throws JsonProcessingException {
+    public ResponseEntity<String> getUsersSavedEvents(HttpServletRequest req, HttpServletResponse res) throws JsonProcessingException {
         String jwtHeader = req.getHeader("Authorization");
         String username = jwtUtility.getUserNameFromJwtToken(jwtHeader);
         ObjectMapper mapper = new ObjectMapper();
@@ -99,7 +99,7 @@ public class EventController {
 
     @RequestMapping("/save")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> saveEvent(@RequestBody EventDTO event){
+    public ResponseEntity<Event> saveEvent(@RequestBody EventDTO event){
        Event eventToSave = new Event();
        eventToSave.setEvent_id(event.getEventId());
        eventToSave.setEvent_url(event.getEventUrl());
