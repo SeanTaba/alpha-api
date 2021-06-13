@@ -50,6 +50,9 @@ public class User
     @Column(name = "wants_Updates",nullable = false)
     private Boolean wantsWeeklyUpdates;
 
+    @Column(name="phone_number", nullable = true)
+    private String phoneNumber;
+
     public User(){
         super();
     }
@@ -172,6 +175,8 @@ public class User
         return roles;
     }
 
+
+
     public void setRoles(Role roles) {
         authorizationLevel = Role.valueOf(roles);
         this.roles = Role.getRole(authorizationLevel);
@@ -192,5 +197,14 @@ public class User
 
     public void setWantsWeeklyUpdates(Boolean wantsWeeklyUpdates) {
         this.wantsWeeklyUpdates = wantsWeeklyUpdates;
+    }
+
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

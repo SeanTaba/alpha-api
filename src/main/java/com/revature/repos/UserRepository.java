@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>
@@ -26,5 +27,6 @@ public interface UserRepository extends JpaRepository<User, Integer>
     Optional<User> findUserByUsernameAndPassword(String username, String password);
     Boolean existsByUsername(String username);
     Boolean existsByEmail(String email);
+    //Set<User> findUserByWantsWeeklyUpdUsers();
 
 }
