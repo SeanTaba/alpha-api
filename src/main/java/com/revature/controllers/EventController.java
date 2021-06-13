@@ -16,6 +16,8 @@ import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -103,10 +105,13 @@ public class EventController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Event> saveEvent(@RequestBody EventDTO event,HttpServletRequest req){
        String jwtHeader = req.getHeader("Authorization");
-       String username = jwtUtility.getUserNameFromJwtToken(jwtHeader);
+//       String username = jwtUtility.getUserNameFromJwtToken(jwtHeader);
+        UserDetails userDetails =
+                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
        Event eventToSave = new Event();
        eventToSave.setEvent_url(event.getEventUrl());
-       eventToSave.setUser_id(userService.getUserByUsername(username).getId());
+       eventToSave.setUser_id(userService.getUserByUsername(userDetails.getUsername()).getId());
         try {
             eventToSave.setEvent_date(new Date(jsFormat.parse(event.getEventDate()).getTime()));
         } catch (ParseException e) {

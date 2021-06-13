@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static org.springframework.http.MediaType.*;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -41,6 +42,7 @@ public class AuthController {
         user.setAuthorizationLevel(user.getAuthorizationLevel());
         String jwt = tokenGenerator.createJwt(user);
         resp.setHeader(jwtConfig.getHeader(), jwt);
+        user.setToken(jwt);
         return ResponseEntity.ok(user);
     }
 

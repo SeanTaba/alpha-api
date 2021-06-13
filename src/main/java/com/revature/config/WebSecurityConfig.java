@@ -55,24 +55,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
-        final CorsConfiguration configuration = new CorsConfiguration();
-        List<String> allowedMethods = Arrays.asList("HEAD",
-                "GET", "POST", "PUT", "DELETE", "PATCH");
-        configuration.setAllowedOrigins(Collections.singletonList("*"));
-        configuration.setAllowedMethods(allowedMethods);
-        // setAllowCredentials(true) is important, otherwise:
-        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
-        configuration.setAllowCredentials(true);
-        // setAllowedHeaders is important! Without it, OPTIONS preflight request
-        // will fail with 403 Invalid CORS request
-        List<String> headers = Arrays.asList("Authorization", "Cache-Control", "Content-Type");
-        configuration.setAllowedHeaders(headers);
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource(){
+//        final CorsConfiguration configuration = new CorsConfiguration();
+//        List<String> allowedMethods = Arrays.asList("HEAD",
+//                "GET", "POST", "PUT", "DELETE", "PATCH");
+////        configuration.setAllowedOrigins(Collections.singletonList("*"));
+//        configuration.setAllowedMethods(allowedMethods);
+//        // setAllowCredentials(true) is important, otherwise:
+//        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
+//        configuration.setAllowCredentials(true);
+//        // setAllowedHeaders is important! Without it, OPTIONS preflight request
+//        // will fail with 403 Invalid CORS request
+//        List<String> headers = Arrays.asList("Authorization", "Cache-Control", "Content-Type","Access-Control-Allow-Origin");
+//        configuration.setAllowedHeaders(headers);
+//        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 
     @Autowired
     public void setUserDetailsService(UserDetailsServiceImpl userDetailsService) {
