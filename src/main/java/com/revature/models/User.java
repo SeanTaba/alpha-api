@@ -30,6 +30,16 @@ public class User
     @Column(name = "last_name")
     private String lastName;
 
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     @Email
     @Column(nullable = false, unique = true)
     private String email;
