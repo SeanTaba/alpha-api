@@ -90,7 +90,6 @@ public class EventAPIService {
         format.setTimeZone(TimeZone.getTimeZone("UTC"));
         event.setEvent_date(new Date(format.parse((String) events.get("datetime_utc")).getTime()));
         event.setEvent_title((String) events.get("title"));
-        event.setEvent_description((String) events.get("description"));
         event.setEvent_url((String) events.get("url"));
         event.setEvent_id((Integer) events.get("id"));
     }

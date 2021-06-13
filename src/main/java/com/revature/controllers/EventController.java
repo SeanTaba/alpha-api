@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Date;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RestController
@@ -33,6 +35,7 @@ public class EventController {
     private final LocationService locationService;
     private final JwtUtility jwtUtility;
     private final UserService userService;
+    SimpleDateFormat jsFormat = new SimpleDateFormat(("EE MMM d y H:m:s 'GMT'Z (zz)"));
 
    @Autowired
     public EventController(EventRepository eventRepository, EventAPIService eventAPIService, LocationService locationService, JwtUtility utility, UserService userService)
@@ -99,14 +102,18 @@ public class EventController {
 
     @RequestMapping("/save")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Event> saveEvent(@RequestBody EventDTO event){
+    public ResponseEntity<Event> saveEvent(@RequestBody EventDTO event,HttpServletRequest req){
+       String jwtHeader = req.getHeader("Authorization");
+       String username = jwtUtility.getUserNameFromJwtToken(jwtHeader);
        Event eventToSave = new Event();
-       eventToSave.setEvent_id(event.getEventId());
        eventToSave.setEvent_url(event.getEventUrl());
-       eventToSave.setUser_id(event.getUserId());
-       eventToSave.setEvent_description(event.getEventDescription());
-       eventToSave.setEvent_date(event.getEventDate());
-       eventToSave.setEvent_title(event.getEventTitle());
+       eventToSave.setUser_id(userService.getUserByUsername(username).getId());
+        try {
+            eventToSave.setEvent_date(new Date(jsFormat.parse(event.getEventDate()).getTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        eventToSave.setEvent_title(event.getEventTitle());
        eventAPIService.saveEvent(eventToSave);
 
        return ResponseEntity.accepted().body(eventToSave);

@@ -4,32 +4,20 @@ import java.sql.Date;
 
 public class EventDTO {
 
-    private  int eventId;
     private  int userId;
     private  String eventUrl;
-    private  Date eventDate;
+    private  String eventDate;
     private  String eventTitle;
-    private  String eventDescription;
 
     public EventDTO(){
         super();
     }
 
-    public EventDTO(int eventId, int userId, String eventUrl, Date eventDate, String eventTitle, String eventDescription) {
-        this.eventId = eventId;
+    public EventDTO(int userId, String eventUrl, String eventDate, String eventTitle) {
         this.userId = userId;
         this.eventUrl = eventUrl;
         this.eventDate = eventDate;
         this.eventTitle = eventTitle;
-        this.eventDescription = eventDescription;
-    }
-
-    public int getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(int eventId) {
-        this.eventId = eventId;
     }
 
     public int getUserId() {
@@ -48,11 +36,11 @@ public class EventDTO {
         this.eventUrl = eventUrl;
     }
 
-    public Date getEventDate() {
+    public String getEventDate() {
         return eventDate;
     }
 
-    public void setEventDate(Date eventDate) {
+    public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
     }
 
@@ -64,11 +52,4 @@ public class EventDTO {
         this.eventTitle = eventTitle;
     }
 
-    public String getEventDescription() {
-        return eventDescription;
-    }
-
-    public void setEventDescription(String eventDescription) {
-        this.eventDescription = eventDescription;
-    }
 }
