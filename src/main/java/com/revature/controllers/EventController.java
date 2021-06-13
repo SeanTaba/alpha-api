@@ -68,7 +68,7 @@ public class EventController {
 
     @RequestMapping("/location")
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getEventsAtLocation(@RequestBody CityStateLocationDTO locationDTO) throws IOException, ParseException {
+    public ResponseEntity<String> getEventsAtLocation(@RequestParam CityStateLocationDTO locationDTO) throws IOException, ParseException {
         CoordinatesPair<Double,Double> loc = locationService.getLatLonOfACity(locationDTO.getCity(),locationDTO.getState());
         ObjectMapper mapper = new ObjectMapper();
         String jsonRet = mapper.writeValueAsString(eventAPIService.getEvents(loc.getLatitude(),loc.getLongitude()));
