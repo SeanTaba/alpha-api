@@ -50,6 +50,12 @@ public class User
     @Transient
     private List<Role> roles = new ArrayList<>();
 
+    @Column(name = "wants_Updates",nullable = false)
+    private Boolean wantsWeeklyUpdates;
+
+    @Column(name="phone_number", nullable = true)
+    private String phoneNumber;
+
     public User(){
         super();
     }
@@ -79,7 +85,8 @@ public class User
         this.city = city;
     }
 
-    public User(int id, CredentialsDTO credentialsDTO, String firstName, String lastName, String email, CityStateLocationDTO cityStateLocationDTO, int authorizationLevel) {
+    public User(int id, CredentialsDTO credentialsDTO, String firstName, String lastName, String email, CityStateLocationDTO cityStateLocationDTO, int authorizationLevel, Boolean wantsWeeklyUpdates) {
+
         this.id = id;
         this.username = credentialsDTO.getUsername();
         this.password = credentialsDTO.getPassword();
@@ -90,6 +97,7 @@ public class User
         this.city = cityStateLocationDTO.getCity();
         this.authorizationLevel = authorizationLevel;
         setAuthorizationLevel(authorizationLevel);
+        this.wantsWeeklyUpdates = wantsWeeklyUpdates;
     }
 
     public int getId()
@@ -171,6 +179,8 @@ public class User
         return roles;
     }
 
+
+
     public void setRoles(Role roles) {
         authorizationLevel = Role.valueOf(roles);
         this.roles = Role.getRole(authorizationLevel);
@@ -183,5 +193,22 @@ public class User
     }
     public int getAuthorizationLevel() {
         return authorizationLevel;
+    }
+
+    public Boolean getWantsWeeklyUpdates() {
+        return wantsWeeklyUpdates;
+    }
+
+    public void setWantsWeeklyUpdates(Boolean wantsWeeklyUpdates) {
+        this.wantsWeeklyUpdates = wantsWeeklyUpdates;
+    }
+
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

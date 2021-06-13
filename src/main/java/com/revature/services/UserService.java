@@ -6,7 +6,9 @@ import com.revature.exceptions.*;
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.DataSourceException;
 import com.revature.exceptions.ResourceNotFoundException;
+import com.revature.models.Mail;
 import com.revature.models.User;
+import com.revature.services.MailService;
 
 import com.revature.repos.UserRepository;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -71,6 +75,8 @@ public class UserService {
 
     }
 
+
+
     //checks if all users fields are valid by passing in a user object
     public void isUserValid(User user) throws InvalidRequestException{
         if (user == null) {
@@ -93,6 +99,25 @@ public class UserService {
             throw new InvalidRequestException("Invalid LastName");
         }
     }
+
+
+//    public Boolean isPasswordSecure(User verifyUser){
+//        String password = verifyUser.getPassword();
+//        boolean hasLetter = false;
+//        boolean hasDigit = false;
+//
+//        if (password.length() < 8) return false;
+//
+//        for (char character:password.toCharArray()) {
+//            if (Character.isLetter(character)) hasLetter = true;
+//            if (Character.isDigit(character)) hasDigit = true;
+//            if (hasLetter && hasDigit) return true;
+//        }
+//
+//        return false;
+//    }
+
+
 
     //checks username availability
 //    @Transactional(propagation = Propagation.SUPPORTS)
