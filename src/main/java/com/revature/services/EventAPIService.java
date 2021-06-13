@@ -2,6 +2,9 @@ package com.revature.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.models.Event;
+import com.revature.models.User;
+import com.revature.repos.EventRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,13 +23,19 @@ public class EventAPIService {
     private String clientId = "MjIyMDIzMzR8MTYyMzM2MzAzNC41MTgwMjA2";
     private String clientSecret = "c66dd9c8237fafc6723abc430068fef7563b040d1481779c7193c240b6dad6a0";
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+    private EventRepository eventRepository;
+
+    @Autowired
+    public EventAPIService(EventRepository eventRepository){
+        this.eventRepository = eventRepository;
+    }
 
     @SuppressWarnings("unchecked")
     public List<Event> getEvents(double lat, double lon) throws IOException, ParseException {
         List<Event> returnEvents = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         builder.append("https://api.seatgeek.com/2/events?per_page=50")
-                .append(MessageFormat.format("&lat={0}&lon={1}&clientId={2}&clientSecret={3}", lat, lon, clientId, clientSecret));
+                .append(MessageFormat.format("&lat={0}&lon={1}&client_id={2}&client_secret={3}", lat, lon, clientId, clientSecret));
         URL urlRequest = new URL(builder.toString());
         HttpURLConnection connection = (HttpURLConnection) urlRequest.openConnection();
 
@@ -57,7 +66,7 @@ public class EventAPIService {
     public Event getEvent(String eventId) throws IOException, ParseException {
         Event event = new Event();
         String builder = "https://api.seatgeek.com/2/events" +
-                MessageFormat.format("/{0}?clientId={1}&clientSecret={2}", eventId, clientId, clientSecret);
+                MessageFormat.format("/{0}?client_id={1}&client_secret={2}", eventId, clientId, clientSecret);
         URL urlRequest = new URL(builder);
         HttpURLConnection connection = (HttpURLConnection) urlRequest.openConnection();
 
@@ -67,6 +76,14 @@ public class EventAPIService {
             eventProcess(event, events);
         }
         return event;
+    }
+
+    public Set<Event> getUserEvents(User user){
+        return eventRepository.getEventByUserId(user.getId());
+    }
+
+    public void saveEvent(Event event){
+        eventRepository.save(event);
     }
 
     private void eventProcess(Event event, LinkedHashMap<String, Object> events) throws ParseException {
